@@ -7,12 +7,10 @@
         </tr>
     </thead>
     <tbody>
-        {% for article in articles %}
+        {% for comment in comments %}
             <tr>
-                <td>{{ article.title }}</td>
-                <td>{{ article.content }}</td>
-                <td>{{ article.categorie.name }}</td>
-                <td><a href="{{ path('app_article_show', {id : article.id}) }}">Details</a></td>
+                <td>{{ comment.title }}</td>
+                <td>{{ comment.content }}</td>
             </tr>
         {% endfor %}
     </tbody>

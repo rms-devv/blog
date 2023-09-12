@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Hello ProductController!
+{% endblock %}
+
+{% block body %}
+	<h1>{{ articles.title }}</h1>
+	<p>
+		<i>{{ articles.content }}</i>
+	</p>
+	<p>
+		{{ articles.categorie}}
+	</p>	
+<h2>Commentaires</h2>
+<ul>
+    {% for comment in comments %}
+        <li>
+            Sujet : <strong>{{ comment.title }}</strong>
+            <p>{{ comment.content }}</p>
+			Auteur de l'article : <h3>{{comment.user.firstname}} </h3>
+        </li>
+    {% endfor %}
+	    {% if app.user %}
+
+  
+    <h2>Nouveau commentaire</h2>
+
+    {{form(commentForm)}}
+
+
+{% endif %}
+	<a href="{{ path('app_article') }}">Retour</a>
+
+{% endblock %}

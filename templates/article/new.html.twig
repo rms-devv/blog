@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+
+  
+    <h2>Nouvel article</h2>
+
+    {{form(form)}}
+
+
+{% endif %}
+{% endblock %}  

@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class UserFixture extends Fixture
 {
-    public const Marvin = 'Marvin';
+    public const Marvin = "Marvin";
 
     public function load(ObjectManager $manager): void
     {   
