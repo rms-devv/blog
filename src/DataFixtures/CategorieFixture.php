@@ -14,6 +14,7 @@ class CategorieFixture extends Fixture
     public const JS = 'JS';
     public const Html_Css = 'Html Css';
     public const React_Js = 'React Js';
+    public const Autre = 'Autre...';
 
     public function load(ObjectManager $manager): void
     {
@@ -50,6 +51,11 @@ class CategorieFixture extends Fixture
         $categorie = new Categorie();
         $categorie->setName("React Js");
         $this->addReference(self::React_Js, $categorie);
+        $manager->persist($categorie);
+        $manager->flush();
+        $categorie = new Categorie();
+        $categorie->setName("Autre...");
+        $this->addReference(self::Autre, $categorie);
         $manager->persist($categorie);
         $manager->flush();
     }

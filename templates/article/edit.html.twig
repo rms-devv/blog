@@ -4,7 +4,7 @@
 
 {% block body %}
 {% include "/navbar.html.twig" %}<br>
-    {% if app.user %}
+    {% if app.user.id == article.user.id %}
 
   
     <h2>Nouvel article</h2>
@@ -13,4 +13,4 @@
 
 
 {% endif %}
-{% endblock %}  
+{% endblock %} 

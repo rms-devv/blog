@@ -1,25 +1,32 @@
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Categorie</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.title }}</td>
-                <td>{{ article.content }}</td>
-                <td>{{ article.categorie.name }}</td>
-                <td><a href="{{ path('app_article_show', {id : article.id}) }}">Details</a></td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% if app.user %}
-    <a href="{{ path('app_article_new') }}">New</a>
-    <a href="{{ path('app_logout') }}">Deconnexion</a>
-{% else %}
-    <a href="{{ path('app_login') }}">Login</a>
-{% endif %}
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    {% include "/navbar.html.twig" %}<br>
+    <div class="container">
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 d-flex flex-column justify-content-between">
+                        <img class="card-img-top" src="{{ asset('uploads/article/' ~ article.image) }}" alt="photo de profil">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ article.title }}</h5>
+                            <p class="card-text">
+                                {{ article.content|slice(0, 100) }}
+                                {% if article.content|length > 100 %}...
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('app_article_show', {id : article.id}) }}" class="btn btn-primary">Détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

@@ -106,6 +106,8 @@ class Article
         return $this;
     }
 
+
+
     /**
      * @return Collection<int, Comments>
      */

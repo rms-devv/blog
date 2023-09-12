@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Comment;
 use Symfony\Component\HttpFoundation\Request;
 class CommentController extends AbstractController
 {
@@ -22,28 +23,28 @@ class CommentController extends AbstractController
         ]);
     }
 
-    #[Route('/comment/new', name: 'app_comment_new')]
-    public function create(Request $request, EntityManagerInterface $entityManager)
-    {
-        $comment = new Comments();
+    #[Route('/comment/delete/{id<\d+>}', name: 'app_comment_delete')]
+    public function delete(
+        Comments $comment,
+        EntityManagerInterface $em,
 
-        $user = $this->getUser();
-
-        if ($user) {
-            $comment->setUser($user);
-        }
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_article_show', ['id' => $comment->getId()]);
-        }
-
-        return $this->render('comment/new.html.twig', [
-            'form' => $form->createView(),
+    ): Response 
+    {   
+        
+       if ($this->getUser() == $comment->getUser()) {
+        $em->remove($comment);
+        $em->flush();
+        
+        $this->addFlash('notice', 'Commentaire supprimé');
+        
+        return $this->redirectToRoute('app_article_show', [
+            'id' => $comment->getArticle()->getId()
+            
         ]);
+        
+        }
+
+        return $this->redirectToRoute('app_article_show');
     }
 }
+

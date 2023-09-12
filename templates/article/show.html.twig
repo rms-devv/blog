@@ -5,31 +5,55 @@
 {% endblock %}
 
 {% block body %}
-	<h1>{{ articles.title }}</h1>
+	{% include "/navbar.html.twig" %}<br>
+	{% for message in app.flashes('notice')%}
+		<p>{{message}}</p>
+	{% endfor %}
+	<h1>{{ article.title }}</h1>
 	<p>
-		<i>{{ articles.content }}</i>
+		<i>{{ article.content }}</i>
 	</p>
+	<img class=" width: 8rem;" src="{{asset('uploads/article/'~ article.image)}}" alt="photo de profil" alt="Card image cap">
 	<p>
-		{{ articles.categorie}}
-	</p>	
-<h2>Commentaires</h2>
-<ul>
-    {% for comment in comments %}
-        <li>
-            Sujet : <strong>{{ comment.title }}</strong>
-            <p>{{ comment.content }}</p>
-			Auteur de l'article : <h3>{{comment.user.firstname}} </h3>
-        </li>
-    {% endfor %}
-	    {% if app.user %}
+		{{ article.categorie }}
+	</p>
 
-  
-    <h2>Nouveau commentaire</h2>
-
-    {{form(commentForm)}}
-
-
+{% if app.user is not null and app.user.id is defined %}
+    {% if app.user.id == article.user.id %}
+        <a href="{{ path('app_article_delete', {id : article.id}) }}" class="btn btn-primary">Supprimer l'article</a>
+        <a href="{{ path('app_article_edit', {id : article.id}) }}" class="btn btn-primary">Modifier l'article</a>
+    {% endif %}
 {% endif %}
-	<a href="{{ path('app_article') }}">Retour</a>
+	<h2>Commentaires</h2>
+	<ul>
+		{% for comment in comments %}
+			<li>
+				<strong>{{ comment.title }}</strong>
+				<p>{{ comment.content }}</p>
+				Écrit par
+				<strong>{{ comment.user.firstname }}</strong>
+			</li>
+			{% if app.user is not null and app.user.id is defined %}
+			{% if app.user.id == comment.user.id  %}
+				<a href="{{ path('app_comment_delete',{id : comment.id})}}" class="btn btn-primary">Supprimer</a>
+			{% endif %}
+			{% endif %}
+		{% endfor %}
+	</ul>
+			<a href="{{ path('app_article') }}" class="btn btn-primary">retour</a>
+{% if app.user is not null and app.user.id is defined %}
+	{% if app.user %}
+		{{form(commentForm, {'attr': {'class': 'col-lg-8'}})}}
+			{% endif %}
+		{% else %}
+			<a href="{{ path('app_login') }}" class="btn btn-success">Veuillez vous connecter pour ajouter un commentaire</a>
+		{% endif %}
+		
 
-{% endblock %}
+{% if app.user is not null and app.user.id is defined %}
+		{% if app.user.id == article.user.id %}
+			<a href="{{ path('app_article_delete', {id : article.id}) }}">Supprimer</a>
+		{% endif %}
+		{% endif %}
+
+	{% endblock %}

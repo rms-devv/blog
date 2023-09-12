@@ -19,7 +19,7 @@ class ArticleType extends AbstractType
             ->add('title')
             ->add('content')
             ->add('image', FileType::class, [
-                'label' => 'Brochure (PDF file)',
+                'label' => 'image (Des fichiers images uniquement)',
 
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
@@ -34,8 +34,10 @@ class ArticleType extends AbstractType
                     new File([
                         'maxSize' => '1024k',
                         'mimeTypes' => [
-                            'application/pdf',
-                            'application/x-pdf',
+                            'image/gif',
+                            'image/jpg',
+                            'image/jpeg',
+                            'application/pdf'
                         ],
                         'mimeTypesMessage' => 'Please upload a valid PDF document',
                     ])
