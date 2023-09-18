@@ -1,13 +1,10 @@
 $primary: darken(#c9d2df, 20%);
 
-$body-bg : #baa98985;
+$body-bg : #c9d2df;
 $link-color: black;
 
 .details-button {
     height: 40px; /* Ajustez la hauteur selon vos préférences */
 }
-
-
-
 
 @import "~bootstrap/scss/bootstrap";

@@ -19,6 +19,7 @@ class UserFixture extends Fixture
         $user->setEmail("test@test.com");
         $user->setPassword("1234");
         $user->setPseudo("RMS");
+
         $this->addReference(self::Marvin, $user);
         $manager->persist($user);
 

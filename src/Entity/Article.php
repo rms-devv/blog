@@ -25,9 +25,6 @@ class Article
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'articles')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $User = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
@@ -35,6 +32,10 @@ class Article
 
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Comments::class, orphanRemoval: true)]
     private Collection $Comments;
+
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $User = null;
 
     public function __construct()
     {
@@ -82,17 +83,6 @@ class Article
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->User;
-    }
-
-    public function setUser(?User $User): static
-    {
-        $this->User = $User;
-
-        return $this;
-    }
 
     public function getCategorie(): ?Categorie
     {
@@ -134,6 +124,18 @@ class Article
                 $comment->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }

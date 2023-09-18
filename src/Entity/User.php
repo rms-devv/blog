@@ -23,7 +23,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = [
+        
+        'ROLE_USER',
+        'ROLE_ADMIN'
+    ];
 
     /**
      * @var string The hashed password
@@ -42,10 +46,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Comments::class, orphanRemoval: true)]
     private Collection $comments;
+    
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Article::class, orphanRemoval: true)]
+    private Collection $articles;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
 
@@ -184,6 +196,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getUser() === $this) {
+                $article->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 
 

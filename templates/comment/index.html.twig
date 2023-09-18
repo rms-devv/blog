@@ -1,23 +1,24 @@
+{% include 'base.html.twig' %}
 <table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Categorie</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for comment in comments %}
-            <tr>
-                <td>{{ comment.title }}</td>
-                <td>{{ comment.content }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Content</th>
+			<th>Categorie</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for comment in comments %}
+			<tr>
+				<td>{{ comment.title }}</td>
+				<td>{{ comment.content }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
 </table>
 {% if app.user %}
-    <a href="{{ path('app_article_new') }}">New</a>
-    <a href="{{ path('app_logout') }}">Deconnexion</a>
+	<a href="{{ path('app_article_new') }}">New</a>
+	<a href="{{ path('app_logout') }}">Deconnexion</a>
 {% else %}
-    <a href="{{ path('app_login') }}">Login</a>
+	<a href="{{ path('app_login') }}">Login</a>
 {% endif %}

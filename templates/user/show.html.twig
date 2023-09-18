@@ -1,0 +1,55 @@
+{% include 'base.html.twig' %}
+
+{% block body %}
+	{% for message in app.flashes('notice')%}
+		<p>{{message}}</p>
+	{% endfor %}
+
+	<div id="main-content" class="blog-page">
+		<div class="container mt-4 mb-5 ">
+			<div class="row clearfix justify-content-center">
+				<div class="col-lg-8 col-md-12 left-box text-center">
+					<div class="card single_post">
+						<div class="body pb-4">
+						
+							<h3>
+								Informations personnelles
+							</h3>
+							<div class="img-post mb-3">
+									<img
+									class="d-block img-fluid mx-auto w-25" src="{{asset('uploads/article/'~ user.image)}}" alt="photo de profil">
+								{# Ajout de 'mx-auto' pour centrer l'image horizontalement #}
+								</div>
+							<p>Prenom :
+								{{ user.firstname }}</p>
+							<p>Nom :
+								{{ user.lastname }}</p>
+							<p>Pseudo :
+								{{ user.pseudo }}</p>
+							<p>Email :
+								{{ user.email }}</p>
+						</div>
+						<div class="card-footer">
+							<a href="{{ path('app_user_edit', {id : user.id}) }}" class="btn btn-primary">Modifier les informations personnelles</a>
+						</div>
+					
+					<div class="row justify-content-center">
+					<div class="col-lg-8 col-md-12 left-box text-center">
+					<div class="card single_post mt-4 mb-4">
+						<h2>Vos articles : </h2>
+						{% if user.articles is not null %}
+							
+								{% for article in user.articles %}
+										<a href="{{ path('app_article_show', {id : article.id}) }}">{{article.title}}</a>
+								{% endfor %}
+							
+						{% else %}
+							<p>Aucun article pour cet utilisateur.</p>
+						{% endif %}
+					</div>
+					</div>
+						<div class="card-footer">
+							<a href="{{ path('app_user_article_download', {id : user.id}) }}" class="btn btn-primary">Télécharger mes articles</a>
+						</div>
+					</div>
+				{% endblock %}
