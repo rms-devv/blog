@@ -36,8 +36,8 @@ class ArticleController extends AbstractController
     #[Route('/categorie/article/{id<\d+>}', name: 'app_article_show_by_categorie_id')]
     public function showArticlesByCategory(
         EntityManagerInterface $entityManager,
-        Categorie $categorie) 
-    {
+        Categorie $categorie
+    ) {
         $articles = $entityManager->getRepository(Article::class)->findBy(
             ['Categorie' => $categorie->getId()],
             ['title' => 'ASC']
@@ -69,7 +69,7 @@ class ArticleController extends AbstractController
             $user = $this->getUser();
             if ($user) {
                 $comment->setUser($user);
-            }    
+            }
             $entityManager->persist($comment);
             $entityManager->flush();
             $user = $comment->getArticle()->getUser();

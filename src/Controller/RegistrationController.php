@@ -17,7 +17,7 @@ use Symfony\Component\Mime\Email;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class RegistrationController extends AbstractController
 {
@@ -59,13 +59,13 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/monprofil/{id<\d+>}', name: 'app_user_show')]
+    #[Route('/monprofil', name: 'app_user_show')]
     public function show(
+        #[CurrentUser()]
         User $user,
-        EntityManagerInterface $entityManager
-    ): Response {
+    ): Response 
+    {
         $articles = $user->getArticles();
-
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
@@ -100,10 +100,11 @@ class RegistrationController extends AbstractController
 
 
 
-    #[Route('/user/edit/{id<\d+>}', name: 'app_user_edit')]
+    #[Route('/user/edit', name: 'app_user_edit')]
     public function edit(
         Request $request,
         EntityManagerInterface $em,
+        #[CurrentUser()]
         User $user,
         UserPasswordHasherInterface $userPasswordHasher,
         SluggerInterface $slugger
@@ -117,22 +118,15 @@ class RegistrationController extends AbstractController
 
             if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
-
-                // Move the file to the directory where brochures are stored
                 try {
                     $brochureFile->move(
                         $this->getParameter('article_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
                 }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
                 $user->setImage("$newFilename");
             }
             $user->setPassword(
