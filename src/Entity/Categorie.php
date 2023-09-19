@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Entity;
-
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
 {
+    use TimestampableEntity;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,6 +21,14 @@ class Categorie
 
     #[ORM\OneToMany(mappedBy: 'Categorie', targetEntity: Article::class, orphanRemoval: true)]
     private Collection $articles;
+
+    #[ORM\Column(length: 255)]
+    #[Gedmo\Slug(
+        fields: ['name'],
+        updatable: false,
+        unique: true,
+    )]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -75,5 +84,17 @@ class Categorie
     public function __toString() : string
     {
         return $this->getName();
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 }

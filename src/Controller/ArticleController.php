@@ -24,8 +24,8 @@ class ArticleController extends AbstractController
     #[Route('/article', name: 'app_article')]
     public function index(
         ArticleRepository $ArticleRepository,
-    ): Response {
-
+    ): Response {   
+        
         return $this->render('article/index.html.twig', [
             'articles' => $ArticleRepository->findAll(),
 
@@ -33,7 +33,7 @@ class ArticleController extends AbstractController
     }
 
     // Voir tous les articles d'une categorie séléctionnée 
-    #[Route('/categorie/article/{id<\d+>}', name: 'app_article_show_by_categorie_id')]
+    #[Route('/categorie/article/{slug}', name: 'app_article_show_by_categorie_id')]
     public function showArticlesByCategory(
         EntityManagerInterface $entityManager,
         Categorie $categorie
@@ -51,7 +51,7 @@ class ArticleController extends AbstractController
     }
 
     // Voir le detail d'un article 
-    #[Route('/article/{id<\d+>}', name: 'app_article_show')]
+    #[Route('/article/{slug}', name: 'app_article_show', priority: 1)]
     public function show(
         Article $article,
         Request $request,
@@ -82,7 +82,7 @@ class ArticleController extends AbstractController
                 ->html('<p>Un commentaire a été ajouté a votre article !</p>');
             $mailer->send($email);
 
-            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+            return $this->redirectToRoute('app_article_show', ['slug' => $article->getSlug()]);
         }
 
         return $this->render('article/show.html.twig', [
@@ -94,7 +94,7 @@ class ArticleController extends AbstractController
 
 
     // Nouvelle article
-    #[Route('/article/new', name: 'app_article_new')]
+    #[Route('/article/new', name: 'app_article_new', priority: 2)]
     public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger)
     {
         $article = new Article();
@@ -139,7 +139,7 @@ class ArticleController extends AbstractController
     }
 
     // Supprimer un article
-    #[Route('/article/delete/{id<\d+>}', name: 'app_article_delete')]
+    #[Route('/article/delete/{slug}', name: 'app_article_delete')]
     public function delete(
         Article $article,
         EntityManagerInterface $em
@@ -156,7 +156,7 @@ class ArticleController extends AbstractController
     }
 
     // Modifier un article
-    #[Route('/article/edit/{id<\d+>}', name: 'app_article_edit')]
+    #[Route('/article/edit/{slug}', name: 'app_article_edit')]
     public function edit(
         Request $request,
         EntityManagerInterface $em,
@@ -189,7 +189,7 @@ class ArticleController extends AbstractController
             $em->flush();
             $this->addFlash('notice', 'Article modifié');
 
-            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+            return $this->redirectToRoute('app_article_show', ['slug' => $article->getSlug()]);
         }
 
         return $this->render('article/edit.html.twig', [

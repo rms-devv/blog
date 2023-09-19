@@ -5,10 +5,12 @@ namespace App\Entity;
 use App\Repository\CommentsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity(repositoryClass: CommentsRepository::class)]
 class Comments
-{
+{   
+    use TimestampableEntity;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,6 +29,7 @@ class Comments
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $User = null;
+
 
     public function getId(): ?int
     {
@@ -80,4 +83,6 @@ class Comments
 
         return $this;
     }
+
+
 }

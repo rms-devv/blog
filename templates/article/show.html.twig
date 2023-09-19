@@ -23,8 +23,8 @@
 							<p>{{ article.content }}</p>
 							{% if app.user is not null and app.user.id is defined %}
 								{% if app.user.id == article.user.id %}
-									<a href="{{ path('app_article_delete', {id : article.id}) }}" class="btn btn-primary">Supprimer l'article</a>
-									<a href="{{ path('app_article_edit', {id : article.id}) }}" class="btn btn-primary">Modifier l'article</a>
+									<a href="{{ path('app_article_delete', {slug : article.slug}) }}" class="btn btn-primary">Supprimer l'article</a>
+									<a href="{{ path('app_article_edit', {slug : article.slug}) }}" class="btn btn-primary">Modifier l'article</a>
 								{% endif %}
 							{% endif %}
 										</div>
@@ -89,7 +89,7 @@
 				</div>
 			</div>
 				<div class="text-center  mx-auto mt-5">
-	<a href="{{ path('app_article_show_by_categorie_id', {id : article.categorie.id} )}}" class="btn btn-success">retour</a>
+	<a href="{{ path('app_article_show_by_categorie_id', {slug : article.categorie.slug} )}}" class="btn btn-success">retour</a>
 		<a href="{{ path('app_categorie')}}" class="btn btn-success">Acceuil</a>
 	</div>
 		</div>

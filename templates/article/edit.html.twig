@@ -1,7 +1,7 @@
 {% include 'base.html.twig' %}
 
 {% block body %}
-	{% if app.user.id == article.user.id %}
+	{% if user.id == article.user.id %}
 		<div class="container mt-4  ">
 			<div class="col-lg-8 col-md-12 left-box text-center  mx-auto">
 				<div class="card p-4">

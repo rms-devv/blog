@@ -39,7 +39,7 @@
 								</h2>
 								{% if articles is not null %}
 									{% for article in user.articles %}
-										<a href="{{ path('app_article_show', {id : article.id}) }}">{{article.title}}</a>
+										<a href="{{ path('app_article_show', {slug : article.slug}) }}">{{article.title}}</a>
 									{% endfor %}
 								{% else %}
 									<p>Aucun article pour cet utilisateur.</p>
@@ -47,7 +47,7 @@
 
 
 								<div class="card-footer">
-									<a href="{{ path('app_user_article_download', {id : app.user.id}) }}" class="btn btn-primary">Télécharger mes articles</a>
+									<a href="{{ path('app_user_article_download', {slug : app.user.id}) }}" class="btn btn-primary">Télécharger mes articles</a>
 								</div>
 							</div>
 						</div>

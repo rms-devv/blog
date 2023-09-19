@@ -25,7 +25,7 @@
 							</p>
 						</div>
 						<div class="card-footer">
-							<a href="{{ path('app_article_show', {id : article.id}) }}" class="btn btn-primary">Détails</a>
+							<a href="{{ path('app_article_show', {slug : article.slug}) }}" class="btn btn-primary">Détails</a>
 						</div>
 					</div>
 				</div>
@@ -35,5 +35,7 @@
 	</div>
 	<div class="text-center  mx-auto mt-5">
 	<a href="{{ path('app_categorie')}}" class="btn btn-success">retour</a>
+
 	</div>
+
 {% endblock %}

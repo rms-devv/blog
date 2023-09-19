@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Entity;
-
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\DBAL\Types\Types;
+use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
+    use TimestampableEntity;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -36,6 +38,15 @@ class Article
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $User = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    #[Gedmo\Slug(
+        fields: ['title'],
+        updatable: false,
+        unique: true,
+    )]
+    private ?string $slug = null;
+ 
 
     public function __construct()
     {
@@ -136,6 +147,18 @@ class Article
     public function setUser(?User $User): static
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
