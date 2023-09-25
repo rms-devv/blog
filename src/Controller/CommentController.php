@@ -42,7 +42,7 @@ class CommentController extends AbstractController
         $this->addFlash('notice', 'Commentaire supprimé');
 
         return $this->redirectToRoute('app_article_show', [
-            'id' => $comment->getArticle()->getId(),
+            'slug' => $comment->getArticle()->getSlug()
         ]);
     }
 
@@ -61,8 +61,7 @@ class CommentController extends AbstractController
             $em->flush();
             $this->addFlash('notice', 'Commentaire modifié');
             return $this->redirectToRoute('app_article_show', [
-                'id' => $comment->getArticle()->getId()
-
+                'slug' => $comment->getArticle()->getSlug()
             ]);
         }
 

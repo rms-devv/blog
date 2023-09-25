@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
+        "easycorp/easyadmin-bundle": "^4",
         "knplabs/knp-paginator-bundle": "^6.2",
         "phpoffice/phpspreadsheet": "^1.29",
         "stof/doctrine-extensions-bundle": "^1.8",
@@ -23,6 +24,9 @@
         "symfony/mime": "6.3.*",
         "symfony/runtime": "6.3.*",
         "symfony/security-bundle": "6.3.*",
+        "symfony/stimulus-bundle": "^2.12",
+        "symfony/ux-live-component": "^2.12",
+        "symfony/ux-twig-component": "^2.12",
         "symfony/validator": "6.3.*",
         "symfony/webpack-encore-bundle": "^2.0",
         "symfony/yaml": "6.3.*"

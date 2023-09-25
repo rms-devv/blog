@@ -1,3 +1,4 @@
+import './bootstrap.js';
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -11,5 +12,4 @@ import './styles/app.scss';
 // You can specify which plugins you need
 import { Tooltip, Toast, Popover } from 'bootstrap';
 
-// start the Stimulus application
-import './node_modules/bootstrap';
+

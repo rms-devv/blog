@@ -4,7 +4,8 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Register</h1>
+<div class="container col-8">
+	<h1 class="mb-5 mt-4">Register</h1>
 
 	{{ form_errors(registrationForm) }}
 
@@ -16,8 +17,6 @@
 	{{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
-	{{ form_row(registrationForm.agreeTerms) }}
-
-	<button type="submit" class="btn">Register</button>
 	{{ form_end(registrationForm) }}
+	</div>
 {% endblock %}
