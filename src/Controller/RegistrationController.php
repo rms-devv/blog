@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\Plan;
 use App\Entity\User;
+use App\Entity\Subscription;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,13 +65,17 @@ class RegistrationController extends AbstractController
     public function show(
         #[CurrentUser()]
         User $user,
+        ManagerRegistry $doctrine
     ): Response 
-    {
+    {   $plans = $doctrine->getRepository(Plan::class)->findAll();
+        $activeSub = $doctrine->getRepository(Subscription::class)->findActiveSub($this->getUser()->getId());
         $articles = $user->getArticles();
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'articles' => $articles,
+            'activeSub' => $activeSub,
+            'plans' => $plans,
         ]);
     }
 
@@ -145,6 +151,5 @@ class RegistrationController extends AbstractController
             'form' => $form,
         ]);
     }
-
     
 }

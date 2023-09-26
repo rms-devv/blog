@@ -29,15 +29,16 @@ class Plan
     #[ORM\Column(length: 255)]
     private ?string $stripeId = null;
 
-    #[ORM\OneToMany(mappedBy: 'Plan', targetEntity: Subcription::class, orphanRemoval: true)]
-    private Collection $subcriptions;
 
     #[ORM\Column(length: 255)]
     private ?string $paymentLink = null;
 
+    #[ORM\OneToMany(mappedBy: 'plan', targetEntity: Subscription::class, orphanRemoval: true)]
+    private Collection $subscriptions;
+
     public function __construct()
     {
-        $this->subcriptions = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,33 +97,7 @@ class Plan
     /**
      * @return Collection<int, Subcription>
      */
-    public function getSubcriptions(): Collection
-    {
-        return $this->subcriptions;
-    }
-
-    public function addSubcription(Subcription $subcription): static
-    {
-        if (!$this->subcriptions->contains($subcription)) {
-            $this->subcriptions->add($subcription);
-            $subcription->setPlan($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubcription(Subcription $subcription): static
-    {
-        if ($this->subcriptions->removeElement($subcription)) {
-            // set the owning side to null (unless already changed)
-            if ($subcription->getPlan() === $this) {
-                $subcription->setPlan(null);
-            }
-        }
-
-        return $this;
-    }
-
+    
     public function getPaymentLink(): ?string
     {
         return $this->paymentLink;
@@ -131,6 +106,36 @@ class Plan
     public function setPaymentLink(string $paymentLink): static
     {
         $this->paymentLink = $paymentLink;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setPlan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): static
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getPlan() === $this) {
+                $subscription->setPlan(null);
+            }
+        }
 
         return $this;
     }

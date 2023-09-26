@@ -1,64 +1,62 @@
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>
-			{% block title %}Welcome!
-			{% endblock %}
-		</title>
-		{% block stylesheets %}
-			{{ encore_entry_link_tags('app') }}
-		{% endblock %}
-	</head>
-	<body>
-		{% block body %}
-			<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('app_categorie') }}">Accueil</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
+                        </li>
+                        <li>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_user_show') }}">Mon profil</a>
+                        </li>					
+                        {% if 'ROLE_ADMIN' in app.user.getRoles() %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_register') }}">Inscription</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-				<div class="container-fluid">
-					<a class="navbar-brand" href="{{ path('app_categorie') }}">Accueil</a>
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-							<li class="nav-item">
-								{% if app.user %}
-									<li class="nav-item">
-										<a class="nav-link active" aria-current="page" href="{{ path('app_article_new') }}">Nouvel article</a>
-									</li>
-									<li>
-										<a class="nav-link active" aria-current="page" href="{{ path('app_user_show') }}">Mon profil</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link active" aria-current="page" href="{{ path('app_logout') }}">Deconnexion</a>
-									</li>
-								{% else %}
-									<a class="nav-link active" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
-								</li>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link active" aria-current="page" href="{{ path('app_register') }}">Inscription</a>
-							</li>
-						{% endif %}
-						{% if 'ROLE_ADMIN' in app.user.getRoles() %}
-							<li class="nav-item">
-								<a class="nav-link active" aria-current="page" href="/admin">Admin</a>
-							</li>
-						{% endif %}
-					</ul>
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-				</div>
-			</div>
-		</body>
-	</html>
-</nav>
-{% for message in app.flashes('notice')%}
-	<div class="alert alert-success" role="alert">
-		{{message}}
-	</div>
-{% endfor %}
-{% for message in app.flashes('error')%}
-	<div class="alert alert-danger" role="alert">
-		{{message}}
-	</div>
-{% endfor %}{% endblock %}{% block javascripts %}
-{{ encore_entry_script_tags('app') }}{% endblock %}</body></html>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% block body %}{% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</body>
+</html>
+

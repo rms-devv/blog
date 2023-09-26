@@ -26,7 +26,18 @@
 								{{user.pseudo }}</p>
 							<p>Email :
 								{{ user.email }}</p>
-
+							{% if activeSub %}
+								Votre abonnement
+								{{activeSub.plan.name}}
+								est actif et sera renouvelé
+								{{activeSub.currentPeriodEnd|date('d/m/Y')}}.
+								<br/>
+							{% else %}
+								<h3>Souscrire un abonnement</h3>
+								{% for plan in plans %}
+									<a target="_blank" href="{{ plan.paymentLink }}" class="btn btn-primary">{{plan.name}}</a>
+								{% endfor %}
+							{% endif %}
 						</div>
 						<div class="card-footer">
 							<a href="{{ path('app_user_edit') }}" class="btn btn-primary">Modifier les informations personnelles</a>

@@ -50,17 +50,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Article::class, orphanRemoval: true)]
     private Collection $articles;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subcription::class, orphanRemoval: true)]
-    private Collection $subcriptions;
+ 
 
     #[ORM\Column(length: 255)]
     private ?string $stripeId = null;
+
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subscription::class, orphanRemoval: true)]
+    private Collection $subscriptions;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->articles = new ArrayCollection();
-        $this->subcriptions = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
+     
     }
 
 
@@ -245,33 +248,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Subcription>
      */
-    public function getSubcriptions(): Collection
-    {
-        return $this->subcriptions;
-    }
-
-    public function addSubcription(Subcription $subcription): static
-    {
-        if (!$this->subcriptions->contains($subcription)) {
-            $this->subcriptions->add($subcription);
-            $subcription->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubcription(Subcription $subcription): static
-    {
-        if ($this->subcriptions->removeElement($subcription)) {
-            // set the owning side to null (unless already changed)
-            if ($subcription->getUser() === $this) {
-                $subcription->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
+    
     public function getStripeId(): ?string
     {
         return $this->stripeId;
@@ -280,6 +257,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStripeId(string $stripeId): static
     {
         $this->stripeId = $stripeId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): static
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
+            }
+        }
 
         return $this;
     }

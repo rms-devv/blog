@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -20,7 +22,7 @@ class Invoice
     private ?string $stripeId = null;
 
     #[ORM\Column]
-    private ?int $amoundPaid = null;
+    private ?int $amountPaid = null;
 
     #[ORM\Column(length: 255)]
     private ?string $invoiceNumber = null;
@@ -30,7 +32,13 @@ class Invoice
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Subcription $Subscription = null;
+    private ?Subscription $Subscription = null;
+
+    public function __construct()
+    {
+        
+    }
+
 
     public function getId(): ?int
     {
@@ -49,14 +57,14 @@ class Invoice
         return $this;
     }
 
-    public function getAmoundPaid(): ?int
+    public function getAmountPaid(): ?int
     {
-        return $this->amoundPaid;
+        return $this->amountPaid;
     }
 
-    public function setAmoundPaid(int $amoundPaid): static
+    public function setAmountPaid(int $amountPaid): static
     {
-        $this->amoundPaid = $amoundPaid;
+        $this->amountPaid = $amountPaid;
 
         return $this;
     }
@@ -85,15 +93,19 @@ class Invoice
         return $this;
     }
 
-    public function getSubscription(): ?Subcription
+    public function getSubscription(): ?Subscription
     {
         return $this->Subscription;
     }
 
-    public function setSubscription(?Subcription $Subscription): static
+    public function setSubscription(?Subscription $Subscription): static
     {
         $this->Subscription = $Subscription;
 
         return $this;
     }
+
+
+
+
 }

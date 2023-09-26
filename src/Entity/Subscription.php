@@ -2,22 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\SubcriptionRepository;
+use App\Repository\SubscriptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-#[ORM\Entity(repositoryClass: SubcriptionRepository::class)]
-class Subcription
+#[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
+class Subscription
 {
-    use TimestampableEntity;
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $stripeId = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $currentPeriodStart = null;
@@ -28,18 +28,15 @@ class Subcription
     #[ORM\Column]
     private ?bool $isActive = null;
 
-    #[ORM\ManyToOne(inversedBy: 'subcriptions')]
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Plan $Plan = null;
+    private ?Plan $plan = null;
 
-    #[ORM\ManyToOne(inversedBy: 'subcriptions')]
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $User = null;
+    private ?User $user = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $stripeId = null;
-
-    #[ORM\OneToMany(mappedBy: 'Subscription', targetEntity: Invoice::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'Subscription', targetEntity: Invoice::class)]
     private Collection $invoices;
 
     public function __construct()
@@ -50,6 +47,18 @@ class Subcription
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getStripeId(): ?string
+    {
+        return $this->stripeId;
+    }
+
+    public function setStripeId(string $stripeId): static
+    {
+        $this->stripeId = $stripeId;
+
+        return $this;
     }
 
     public function getCurrentPeriodStart(): ?\DateTimeInterface
@@ -90,36 +99,24 @@ class Subcription
 
     public function getPlan(): ?Plan
     {
-        return $this->Plan;
+        return $this->plan;
     }
 
-    public function setPlan(?Plan $Plan): static
+    public function setPlan(?Plan $plan): static
     {
-        $this->Plan = $Plan;
+        $this->plan = $plan;
 
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
-
-        return $this;
-    }
-
-    public function getStripeId(): ?string
-    {
-        return $this->stripeId;
-    }
-
-    public function setStripeId(string $stripeId): static
-    {
-        $this->stripeId = $stripeId;
+        $this->user = $user;
 
         return $this;
     }
@@ -153,4 +150,6 @@ class Subcription
 
         return $this;
     }
+
+
 }
