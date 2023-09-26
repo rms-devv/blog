@@ -24,7 +24,7 @@
                             {% endif %}
                         {% endif %}
                     </div>
-                    <div class="card-footer">écrit par {{ article.user.firstname }} le {{ article.createdAt|date('d/m/Y') }}</div>
+                    <div class="card-footer">écrit par {{ article.user.firstname }} le {{ article.createdAt|date('l d F Y') }}</div>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                                         </div>
                                     </li>
                                     <div class="card-footer">
-                                        écrit le {{ comment.createdAt|date('d/m/Y') }}
+                                        écrit le {{ comment.createdAt|date('l d F Y') }}<br>
                                         {% if app.user is not null and app.user.id is defined %}
                                             {% if app.user.id == comment.user.id  %}
                                                 <a href="{{ path('app_comment_edit',{id : comment.id})}}" class="btn btn-primary">modifier</a>
