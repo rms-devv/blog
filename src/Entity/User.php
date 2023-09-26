@@ -50,10 +50,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Article::class, orphanRemoval: true)]
     private Collection $articles;
 
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subcription::class, orphanRemoval: true)]
+    private Collection $subcriptions;
+
+    #[ORM\Column(length: 255)]
+    private ?string $stripeId = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->subcriptions = new ArrayCollection();
     }
 
 
@@ -231,6 +238,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $article->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subcription>
+     */
+    public function getSubcriptions(): Collection
+    {
+        return $this->subcriptions;
+    }
+
+    public function addSubcription(Subcription $subcription): static
+    {
+        if (!$this->subcriptions->contains($subcription)) {
+            $this->subcriptions->add($subcription);
+            $subcription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubcription(Subcription $subcription): static
+    {
+        if ($this->subcriptions->removeElement($subcription)) {
+            // set the owning side to null (unless already changed)
+            if ($subcription->getUser() === $this) {
+                $subcription->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStripeId(): ?string
+    {
+        return $this->stripeId;
+    }
+
+    public function setStripeId(string $stripeId): static
+    {
+        $this->stripeId = $stripeId;
 
         return $this;
     }

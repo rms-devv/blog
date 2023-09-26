@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello StripeController!{% endblock %}
+
+{% block body %}
+<h1>Souscrire un abonnement</h1>
+{% for plan in plans %}
+<a target="_blank"href="{{ plan.paymentLink }}" class="btn btn-primary">{{plan.name}}</a>
+{% endfor %}
+{% endblock %}
+
