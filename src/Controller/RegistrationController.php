@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Entity\Plan;
 use App\Entity\User;
 use App\Entity\Subscription;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
@@ -66,8 +67,8 @@ class RegistrationController extends AbstractController
         #[CurrentUser()]
         User $user,
         ManagerRegistry $doctrine
-    ): Response 
-    {   $plans = $doctrine->getRepository(Plan::class)->findAll();
+    ): Response {
+        $plans = $doctrine->getRepository(Plan::class)->findAll();
         $activeSub = $doctrine->getRepository(Subscription::class)->findActiveSub($this->getUser()->getId());
         $articles = $user->getArticles();
 
@@ -80,7 +81,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/monprofil/download', name: 'app_user_article_download')]
-    public function download(User $user): BinaryFileResponse
+    public function download(User $user): Response
     {
         $articles = $user->getArticles();
 
@@ -88,21 +89,23 @@ class RegistrationController extends AbstractController
             return new Response('Aucun article à exporter.');
         }
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $row = 2;
-        foreach ($articles as $article) {
-            $sheet->setCellValue('A' . $row, $article->getTitle());
-            $sheet->setCellValue('B' . $row, $article->getContent());
-            $row++; //
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="mes_articles.csv"');
 
+        $output = fopen('php://output', 'w');
+
+        fputcsv($output, ['Title', 'Content']); // Ajoutez les en-têtes
+
+        foreach ($articles as $article) {
+            fputcsv($output, [$article->getTitle(), $article->getContent()]);
         }
-        $writer = new Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="mes_articles.xlsx"');
-        header('Cache-Control: max-age=0');
-        $writer->save('php://output');
+
+        fclose($output);
+
+        return $response;
     }
+
 
 
 
@@ -151,5 +154,4 @@ class RegistrationController extends AbstractController
             'form' => $form,
         ]);
     }
-    
 }
