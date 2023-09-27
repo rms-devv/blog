@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Plan;
 use App\Entity\User;
 use App\Entity\Subscription;
@@ -21,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-
+use Symfony\Component\HttpFoundation\StreamedResponse;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
@@ -67,8 +66,8 @@ class RegistrationController extends AbstractController
         #[CurrentUser()]
         User $user,
         ManagerRegistry $doctrine
-    ): Response {
-        $plans = $doctrine->getRepository(Plan::class)->findAll();
+    ): Response 
+    {   $plans = $doctrine->getRepository(Plan::class)->findAll();
         $activeSub = $doctrine->getRepository(Subscription::class)->findActiveSub($this->getUser()->getId());
         $articles = $user->getArticles();
 
@@ -80,32 +79,34 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/monprofil/download', name: 'app_user_article_download')]
-    public function download(User $user): Response
+    #[Route('/monprofil/download/{id}', name: 'app_user_article_download')]
+    public function download(User $user): StreamedResponse
     {
         $articles = $user->getArticles();
-
+     
         if (empty($articles)) {
             return new Response('Aucun article à exporter.');
         }
+    
+        $response = new StreamedResponse(function () use ($articles) {
+            $file = fopen('php://output', 'w');
+    
+            fputcsv($file, ['Title', 'Content']);
 
-        $response = new Response();
+            foreach ($articles as $article) {
+                fputcsv($file, [$article->getTitle(), $article->getContent()]);
+            }
+    
+            fclose($file);
+        });
+    
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="mes_articles.csv"');
-
-        $output = fopen('php://output', 'w');
-
-        fputcsv($output, ['Title', 'Content']); // Ajoutez les en-têtes
-
-        foreach ($articles as $article) {
-            fputcsv($output, [$article->getTitle(), $article->getContent()]);
-        }
-
-        fclose($output);
-
+    
         return $response;
     }
-
+    
+    
 
 
 
@@ -154,4 +155,5 @@ class RegistrationController extends AbstractController
             'form' => $form,
         ]);
     }
+    
 }
