@@ -29,11 +29,11 @@ class Subscription
     private ?bool $isActive = null;
 
     #[ORM\ManyToOne(inversedBy: 'subscriptions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Plan $plan = null;
 
     #[ORM\ManyToOne(inversedBy: 'subscriptions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'Subscription', targetEntity: Invoice::class)]

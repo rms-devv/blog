@@ -22,6 +22,9 @@
                         </li>
                         <li>
                             <a class="nav-link active" aria-current="page" href="{{ path('app_user_show') }}">Mon profil</a>
+                        </li>
+                        <li>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_article_new') }}">Nouvel Article</a>
                         </li>					
                         {% if 'ROLE_ADMIN' in app.user.getRoles() %}
                             <li class="nav-item">

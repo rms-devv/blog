@@ -8,7 +8,23 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use Gedmo\Mapping\Annotation as Gedmo;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Post;
+use App\Controller\ArticleController;
+
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[ApiResource(
+       operations: [
+           new Get(normalizationContext: ['groups' => 'article:item']),
+           new GetCollection(normalizationContext: ['groups' => 'article:collection']),
+           new Post(normalizationContext: ['groups' => 'article:item'])
+       ],
+    order: ['title' => 'ASC'],
+    paginationEnabled: false,
+    )]
 class Article
 {
     use TimestampableEntity;
@@ -16,30 +32,36 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article:collection', 'article:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['article:collection', 'article:item'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['article:collection', 'article:item'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['article:collection', 'article:item'])]
     private ?string $image = null;
 
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[Groups(['article:collection', 'article:item'])]
     private ?Categorie $Categorie = null;
 
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Comments::class, orphanRemoval: true)]
     private Collection $Comments;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $User = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['article:collection', 'article:item'])]
     #[Gedmo\Slug(
         fields: ['title'],
         updatable: false,

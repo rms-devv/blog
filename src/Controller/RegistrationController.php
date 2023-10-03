@@ -16,9 +16,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 class RegistrationController extends AbstractController
@@ -105,10 +102,6 @@ class RegistrationController extends AbstractController
     
         return $response;
     }
-    
-    
-
-
 
     #[Route('/user/edit', name: 'app_user_edit')]
     public function edit(

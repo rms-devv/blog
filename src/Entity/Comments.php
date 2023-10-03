@@ -6,7 +6,7 @@ use App\Repository\CommentsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: CommentsRepository::class)]
 class Comments
 {   
@@ -20,14 +20,15 @@ class Comments
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['article:item'])]
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'Comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Article $article = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $User = null;
 
 

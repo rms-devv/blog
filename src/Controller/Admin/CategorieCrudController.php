@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Categorie;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+
 
 class CategorieCrudController extends AbstractCrudController
 {
@@ -12,14 +15,15 @@ class CategorieCrudController extends AbstractCrudController
         return Categorie::class;
     }
 
-    /*
+    
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield Field::new('name');
+        yield Field::new('slug')
+            ->hideWhenCreating();
+        yield DateTimeField::new('created_at')
+            ->hideWhenCreating();
+          
     }
-    */
+    
 }

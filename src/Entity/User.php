@@ -40,14 +40,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $pseudo = null;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Comments::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Comments::class )]
     private Collection $comments;
     
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Article::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Article::class )]
     private Collection $articles;
 
  
@@ -55,7 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeId = null;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subscription::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subscription::class )]
     private Collection $subscriptions;
 
     public function __construct()
