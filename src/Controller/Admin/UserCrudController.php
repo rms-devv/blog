@@ -20,7 +20,8 @@ class UserCrudController extends AbstractCrudController
         yield Field::new('lastname');
         yield Field::new('firstname');
         yield Field::new('pseudo');
-        yield Field::new('password');
+        yield Field::new('plainPassword')
+            ->setHelp('Laisser vide pour conserver le mot de passe existant');
         yield ChoiceField::new('roles')
             ->allowMultipleChoices()
             ->setChoices([

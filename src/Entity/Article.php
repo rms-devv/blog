@@ -13,8 +13,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Post;
-use App\Controller\ArticleController;
-
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ApiResource(
        operations: [

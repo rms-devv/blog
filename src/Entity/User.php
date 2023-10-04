@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -50,13 +52,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Article::class )]
     private Collection $articles;
 
- 
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeId = null;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subscription::class )]
     private Collection $subscriptions;
+
+    private ?string $plainPassword = null;
 
     public function __construct()
     {
@@ -291,7 +293,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Get the value of plainPassword
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
 
+    /**
+     * Set the value of plainPassword
+     */
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
+        // To ensure doctrine send events 
+        $this->setUpdatedAt(new \DateTime());
 
+        return $this;
+    }
 }

@@ -17,7 +17,8 @@ class UserFixture extends Fixture
         $user->setFirstname("Marvin");
         $user->setLastname("Ramos");
         $user->setEmail("test@test.com");
-        $user->setPassword("1234");
+        $user->setPlainPassword("demo");
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setPseudo("RMS");
 
         $this->addReference(self::Marvin, $user);

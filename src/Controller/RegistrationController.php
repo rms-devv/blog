@@ -23,7 +23,6 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(
         Request $request,
-        UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
         MailerInterface $mailer
     ): Response {
@@ -33,12 +32,6 @@ class RegistrationController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
             $mail = $user->getEmail();
             $email = (new Email())
                 ->from('admin@admin.com')
@@ -109,7 +102,6 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $em,
         #[CurrentUser()]
         User $user,
-        UserPasswordHasherInterface $userPasswordHasher,
         SluggerInterface $slugger
     ): Response {
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -117,8 +109,6 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $brochureFile = $form->get('image')->getData();
-
-
             if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
@@ -132,12 +122,7 @@ class RegistrationController extends AbstractController
                 }
                 $user->setImage("$newFilename");
             }
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            
             $em->flush();
             $this->addFlash('notice', 'Profil modifié');
             return $this->redirectToRoute('app_article');
